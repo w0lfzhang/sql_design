@@ -83,7 +83,7 @@ public class InsertData {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
             Date start = format.parse(beginDate);//   
             Date end = format.parse(endDate);//   
-            // getTime()表示返回自 1970 年 1 月 1 日 00:00:00 GMT 以来此 Date 对象表示的毫秒数。  
+            
             if (start.getTime() >= end.getTime()) {  
                 return null;  
             }  

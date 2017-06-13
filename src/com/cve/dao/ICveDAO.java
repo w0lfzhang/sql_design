@@ -10,7 +10,7 @@ public interface ICveDAO {
 	
 	public boolean deleteCve(String cvename) throws Exception;
 	
-	public boolean updateCve(String new_cvename, String old_cvename) throws Exception;
+	public boolean updateCve(String new_cvename, String old_cvename, String description) throws Exception;
 	
 	public Cve queryByName(String cvename) throws Exception;
 	
@@ -20,6 +20,7 @@ public interface ICveDAO {
 	
 	public List<Cve> queryBycompany(String company) throws Exception;
 	
+	public List<Cve> queryByAuthorandAppname(String author, String appname) throws Exception;
 	
 	public Cve queryBymany(String cvename, String author, String company, String appname) throws Exception;
 	

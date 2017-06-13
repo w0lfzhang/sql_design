@@ -60,13 +60,14 @@ public class CveDAOImpl implements ICveDAO {
 
 	@Override
 	//just update cve_name
-	public boolean updateCve(String new_cvename, String old_cvename) throws Exception {
+	public boolean updateCve(String new_cvename, String old_cvename, String description) throws Exception {
 		// TODO Auto-generated method stub
 		boolean flag = false;
-		String sql = "update cve set cve_name=? where cve_name=?";
+		String sql = "update cve set cve_name=?, description=? where cve_name=?";
 		this.ps = this.conn.prepareCall(sql);
 		this.ps.setString(1, new_cvename);
-		this.ps.setString(2, old_cvename);
+		this.ps.setString(2, description);
+		this.ps.setString(3, old_cvename);
 		
 		if( this.ps.executeUpdate() > 0 ){
 			flag = true;
@@ -211,6 +212,33 @@ public class CveDAOImpl implements ICveDAO {
 		
 		this.ps.close();
 		return cve;
+	}
+	
+	public List<Cve> queryByAuthorandAppname(String author, String appname) throws Exception{
+		List<Cve> all = new ArrayList<Cve>();
+		String sql = "select * from cve where author=? and app_name=?";
+		this.ps = this.conn.prepareStatement(sql);
+		
+		this.ps.setString(1, author);
+		this.ps.setString(2, appname);
+		ResultSet rs = this.ps.executeQuery();
+		Cve cve = null;
+		while (rs.next() ){
+			cve = new Cve();
+			cve.setCid(rs.getInt("cid"));
+			cve.setCve_name(rs.getString("cve_name"));
+			cve.setAuthour(rs.getString("author"));
+			cve.setPublished_time(rs.getDate("published_time"));
+			cve.setDescription(rs.getString("description"));
+			cve.setType(rs.getInt("type"));
+			cve.setApp_name(rs.getString("app_name"));
+			cve.setCompany(rs.getString("company"));
+			cve.setPlatform(rs.getString("platform"));
+			all.add(cve);
+		}
+		
+		this.ps.close();
+		return all;
 	}
 
 	public List<Cve> queryByfuzzy(String fuzzy) throws Exception{

@@ -1,6 +1,7 @@
-<%@ page language="java" import="java.util.*" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%@ page language="java" import="com.cve.factory.*"%>
 <%@ page language="java" import="com.cve.vo.*"%>
+<%@ page language="java" import="java.text.SimpleDateFormat"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -67,7 +68,7 @@ body {
 } 
 
 h3 { 
-    text-shadow: 0 1px 0 rgba(255, 255, 255,.7), 0px 2px 0 rgba(0, 0, 0, .5);
+    text-shadow: 0 1px 0, 0px 2px 0 rgba(0, 0, 0, .5);
     display:inline;
     color:#666; 
     line-height:1em;
@@ -84,18 +85,6 @@ fieldset {
     border:none; 
     padding:10px 10px 0; 
 } 
-
-fieldset input[type=text], fieldset input[type=password] { 
-    width:100%; 
-    line-height:2em; 
-    font-size:15px; 
-    height:24px; 
-    border:none; 
-    padding:5px 4px 3px 2.2em; 
-    width:300px; 
-} 
-
-
 
 fieldset input[type=submit] { 
     text-align:center; 
@@ -140,21 +129,7 @@ width:auto;
 margin-top:300px;
 margin-left:580px;
 }
-fieldset input[type=checkbox] { 
-    margin-left:10px; 
-    vertical-align:middle; 
-} 
-fieldset a { 
-    color:blue; 
-    font-size:28px; 
-    margin:6px 0 0 10px; 
-    text-decoration:none; 
-} 
-fieldset a:hover { 
-    text-decoration:underline; 
-} 
-fieldset span { 
-    font-size:12px; 
+ 
 } 
 </style> 
 
@@ -163,8 +138,10 @@ fieldset span {
   <body>
   <%
   Cve cve = null;
-  List<Cve> cves = new ArrayList<Cve>();
+  List<Cve> cves = null;
+  boolean multi_flag = false;
   int recordlen = 0;
+  String time;
   
   String cvename = request.getParameter("cvename");
   String author = request.getParameter("author");
@@ -180,27 +157,66 @@ fieldset span {
   
   String types[] = {"remote exploit", "web application exploit", "Local and Privilege Escalation Exploits", "Denial of Service and PoC Exploits"};
   
+  SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss:SS");   
+  TimeZone t = sdf.getTimeZone();   
+  t.setRawOffset(0);   
+  sdf.setTimeZone(t);   
+  Long startTime = System.currentTimeMillis();
+  Long endTime = 0L;
+  
+  //search according to cvename and author and company and appname
   if ( !cvename_flag && !author_flag && !company_flag && !appname_flag && fuzzy_flag ){
-  	  cve = (Cve)DAOFactory.getICveDAOInstance().queryBymany(cvename, author, company, appname);
-  	  recordlen = 1;
+  	  cve = DAOFactory.getICveDAOInstance().queryBymany(cvename, author, company, appname);
   }
   
+  //search according to cvename
   if( !cvename_flag && author_flag && company_flag && appname_flag && fuzzy_flag ){
-  	  cve = (Cve)DAOFactory.getICveDAOInstance().queryByName(cvename);
-  	  recordlen = 1;
+  	  cve = DAOFactory.getICveDAOInstance().queryByName(cvename);
   }
   
+  //search according to author
   if( cvename_flag && !author_flag && company_flag && appname_flag && fuzzy_flag){
   	  cves = DAOFactory.getICveDAOInstance().queryByauthor(author);
-  	  recordlen = cves.size();  
+  	  multi_flag = true;  
   }
+  
+  //search according to appname
+  if( cvename_flag && author_flag && company_flag && !appname_flag && fuzzy_flag){
+  	  cves = DAOFactory.getICveDAOInstance().queryByappname(appname);
+  	  multi_flag = true; 
+   }
+  	  
+  //search according to company
+  if( cvename_flag && author_flag && !company_flag && appname_flag && fuzzy_flag){
+  	  cves = DAOFactory.getICveDAOInstance().queryBycompany(company);
+  	  multi_flag = true; 
+   }
+  
+  //search according to author and appname
+  if( cvename_flag && !author_flag && company_flag && !appname_flag && fuzzy_flag){
+  	  cves = DAOFactory.getICveDAOInstance().queryByAuthorandAppname(author, appname);
+  	  multi_flag = true; 
+   }
+   
+  //fuzzy search
+  if( cvename_flag && author_flag && company_flag && appname_flag && !fuzzy_flag){
+  	  cves = DAOFactory.getICveDAOInstance().queryByfuzzy(fuzzy);
+  	  multi_flag = true;
+  }
+  //just finish these searches, and the rest searches is the same as the above.
+  
+  endTime = System.currentTimeMillis();
+  time = sdf.format(new Date(endTime - startTime));
   %>
 
 <h1>Search results: </h1>
 
 <%
-	for( int i = 0; i < recordlen; i++ )
+	if( multi_flag && cves != null )
 	{
+		recordlen = cves.size();
+		for( int i = 0; i < recordlen; i++ )
+		{
 %>
 
 <div>
@@ -213,11 +229,33 @@ fieldset span {
   <h3>company: <%=cves.get(i).getCompany() %></h3>
   <h3>platform: <%=cves.get(i).getPlatform() %></h3><br>
 </div>
-<%
-    }
+<% 
+	    }
+    }if ( multi_flag == false && cve != null){
+    	recordlen = 1;
 %>
 
-  <form action="SelectData.jsp">
+<div>
+  <h3>cvename: <%=cve.getCve_name()%></h3>
+  <h3>author: <%=cve.getAuthour()%></h3>
+  <h3>published_time: <%=cve.getPublished_time() %></h3>
+  <h3>description: <%=cve.getDescription() %></h3>
+  <h3>type: <%=types[cve.getType()-1] %></h3>
+  <h3>appname: <%=cve.getApp_name() %></h3>
+  <h3>company: <%=cve.getCompany() %></h3>
+  <h3>platform: <%=cve.getPlatform() %></h3><br>
+</div>
+
+<%
+    }
+ %>
+ 
+ <div>
+ 	Search <%=recordlen %> result(s). 
+ 	Used about <%=time %> s.
+ </div>
+
+  <form action="index.jsp">
   <fieldset> 
           <br><br><center><input type="submit" value="Return" > </center>
    </fieldset>

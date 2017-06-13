@@ -178,7 +178,7 @@ fieldset span {
         </fieldset>
          
         <fieldset> 
-          <center><input type="submit" value="Search" > </center>
+          <br><center><input type="submit" value="Search" > </center>
         </fieldset> 
         
       </div> 

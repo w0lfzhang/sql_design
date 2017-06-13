@@ -153,6 +153,9 @@ fieldset span {
           <div class="inputWrap"> 
             <input type="text" name="new_cvename" placeholder="new cvename" autofocus required> 
           </div> 
+          <div class="inputWrap"> 
+            <input type="text" name="description" placeholder="description" autofocus required> 
+          </div>
         </fieldset>
          
         <fieldset> 

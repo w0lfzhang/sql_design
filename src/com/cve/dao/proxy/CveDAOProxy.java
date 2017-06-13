@@ -50,12 +50,12 @@ public class CveDAOProxy implements ICveDAO {
 	}
 
 	@Override
-	public boolean updateCve(String new_cvename, String old_cvename) throws Exception {
+	public boolean updateCve(String new_cvename, String old_cvename, String description) throws Exception {
 		// TODO Auto-generated method stub
 		boolean flag = false;
 		try{
-			if( this.dao.queryByName(old_cvename) != null ){
-				flag = this.dao.updateCve(new_cvename, old_cvename);
+			if( this.dao.queryByName(old_cvename) != null && this.dao.queryByName(new_cvename) == null ){
+				flag = this.dao.updateCve(new_cvename, old_cvename, description);
 			}
 		}catch(Exception e){
 			throw e;
@@ -129,6 +129,17 @@ public class CveDAOProxy implements ICveDAO {
 		return cve;
 	}
 
+	public List<Cve> queryByAuthorandAppname(String author, String appname) throws Exception{
+		List<Cve> all = null;
+		try{
+			all = this.dao.queryByAuthorandAppname(author, appname);
+		}catch(Exception e){
+			throw e;
+		}finally{
+			this.dbc.close();
+		}
+		return all;
+	}
 	public List<Cve> queryByfuzzy(String fuzzy) throws Exception{
 		List<Cve> all = null;
 		try{
