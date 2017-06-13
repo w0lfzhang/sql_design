@@ -1,3 +1,3 @@
 # sql_design
-A small sql_system for database course.
+a small app to create a cve database and do some operation.
 
