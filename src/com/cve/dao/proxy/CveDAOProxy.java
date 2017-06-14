@@ -64,6 +64,21 @@ public class CveDAOProxy implements ICveDAO {
 		}
 		return flag;
 	}
+	
+	public boolean updateCve(String old_cvename, String new_cvename, String author, String description, String appname, String company) throws Exception{
+		boolean flag = false;
+		try{
+			if( this.dao.queryByName(old_cvename) != null && this.dao.queryByName(new_cvename) == null ){
+				flag = this.dao.updateCve(old_cvename, new_cvename, author, description, appname, company);
+			}
+		}catch(Exception e){
+			throw e;
+		}finally{
+			this.dbc.close();
+		}
+		return flag;
+	}
+	
 
 	@Override
 	public Cve queryByName(String cvename) throws Exception {

@@ -1,27 +1,13 @@
-<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
-<%@ page language="java" import="com.cve.factory.*"%>
-<%@ page language="java" import="com.cve.vo.*"%>
-<%@ page language="java" import="java.text.SimpleDateFormat"%>
-<%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-%>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html>
 <html>
-  <head>
-    <base href="<%=basePath%>">
-    
-    <title>handleupdate</title>
-    
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
-	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-	<meta http-equiv="description" content="This is my page">
-	<!--
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	-->
+<head>
+<title>InsertData</title>
+
+<meta name="keywords" content="keyword1,keyword2,keyword3">
+<meta name="description" content="this is my page">
+<meta name="content-type" content="text/html; charset=utf-8">
+<meta charset = "UTF-8">
 <style  type = "text/css"> 
 
 
@@ -57,34 +43,33 @@ body {
     box-shadow: 0 0 0 0px #FFF;
 } 
 
- h1 { 
+.loginForm h1 { 
     text-shadow: 0 1px 0 rgba(255, 255, 255,.7), 0px 2px 0 rgba(0, 0, 0, .5); 
-     
-     
-    color:#665; 
+    text-transform:uppercase; 
+    text-align:center; 
+    color:#666; 
     line-height:3em; 
-    margin:20px 0 20px 18px;  
+    margin:0px 0 20px 18px; 
+    letter-spacing: 4px; 
     font:normal 30px/1 Microsoft YaHei, sans-serif; 
 } 
-
-h3 { 
-    text-shadow: 0 1px 0, 0px 2px 0 rgba(0, 0, 0, .5);
-    display:inline;
-    color:#666; 
-    line-height:1em;
-    
-	margin:20px 0px 10px 25px;
-    font:normal 20px/1 Microsoft YaHei, sans-serif; 
-} 
-
-div{
-	margin:20px;
-}
 
 fieldset { 
     border:none; 
     padding:10px 10px 0; 
 } 
+
+fieldset input[type=text], fieldset input[type=password] { 
+    width:100%; 
+    line-height:2em; 
+    font-size:15px; 
+    height:24px; 
+    border:none; 
+    padding:5px 4px 3px 2.2em; 
+    width:300px; 
+} 
+
+
 
 fieldset input[type=submit] { 
     text-align:center; 
@@ -129,56 +114,76 @@ width:auto;
 margin-top:300px;
 margin-left:580px;
 }
- 
+fieldset input[type=checkbox] { 
+    margin-left:10px; 
+    vertical-align:middle; 
+} 
+fieldset a { 
+    color:blue; 
+    font-size:28px; 
+    margin:6px 0 0 10px; 
+    text-decoration:none; 
+} 
+fieldset a:hover { 
+    text-decoration:underline; 
+} 
+fieldset span { 
+    font-size:12px; 
 } 
 </style> 
-  </head>
-  
-  <body>
-  <%
-  boolean flag = false;
-  String old_cvename = request.getParameter("old_cvename");
-  String new_cvename = request.getParameter("new_cvename");
-  String description = request.getParameter("description");
-  String author = request.getParameter("author");
-  String appname = request.getParameter("appname");
-  String company = request.getParameter("company");
-  
-  SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss:SS");   
-  TimeZone t = sdf.getTimeZone();   
-  t.setRawOffset(0);   
-  sdf.setTimeZone(t);   
-  Long startTime = System.currentTimeMillis();
-  Long endTime = 0L;
-  
-  if( appname == null )
-  {
-  	if( DAOFactory.getICveDAOInstance().updateCve(new_cvename, old_cvename, description) == true ){
-      	endTime = System.currentTimeMillis();
-      	System.out.println("Update success!");
-      	flag = true;
-  	}
-  }else{
-  	if( DAOFactory.getICveDAOInstance().updateCve(old_cvename, new_cvename, author, description, appname, company) == true ){
-  		endTime = System.currentTimeMillis();
-      	System.out.println("Update success!");
-      	flag = true;
-  	}
-  	
-  }
-  
-  if( flag == true ){
-  	  out.print("<center><h3>update success!</h3></center><br>");
-  	  out.println("<center><h3>Update Used time：" + sdf.format(new Date(endTime - startTime)) + "</h3></center>");
-  }else{
-  	  out.print("somthing error! update failed!");
-  }
-  %>
-  
-  <form action="index.jsp">
-  <fieldset> 
-      <br><center><input type="submit" value="Return" > </center>
-   </fieldset>
-   </form>
-  </body>
-</html>
+
+</head> 
+ 
+<body class = "userlogin_body"> 
+<div class="wrap"> 
+  <form action="handleupdate.jsp" method="post"> 
+    <section class="loginForm"> 
+    
+      <header> 
+   
+      <h1>Update Data</h1> 
+     
+      </header> 
+     
+      <div class="loginForm_content"> 
+        <fieldset> 
+          <div class="inputWrap"> 
+            <input type="text" name="old_cvename" value="<%=request.getParameter("cvename") %>" readonly> 
+          </div>
+          <div class="inputWrap"> 
+            <input type="text" name="new_cvename" placeholder="new cvename" autofocus required> 
+          </div> 
+          <div class="inputWrap"> 
+            <input type="text" name="author" placeholder="new author" required> 
+          </div>
+          <div class="inputWrap"> 
+            <input type="text" name="description" placeholder="new description" required> 
+          </div>
+          <div class="inputWrap"> 
+            <input type="text" name="appname" placeholder="new appname" required> 
+          </div> 
+          <div class="inputWrap"> 
+            <input type="text" name="company" placeholder="new company" required> 
+          </div>
+        </fieldset>
+        
+       
+         
+        <fieldset> 
+          <center><input type="submit" value="Update" > </center>
+        </fieldset> 
+      </div> 
+    </section> 
+  </form> 
+</div> 
+<div class = "logo">
+</div>
+<script type="text/javascript">
+function saysuccess(){
+	alert("insert data success!")
+}
+</script>
+</body> 
+</html> 
+</BODY>
+</HTML>

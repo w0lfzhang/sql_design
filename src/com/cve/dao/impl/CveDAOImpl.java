@@ -75,6 +75,24 @@ public class CveDAOImpl implements ICveDAO {
 		this.ps.close();
 		return flag;
 	}
+	
+	public boolean updateCve(String old_cvename, String new_cvename, String author, String description, String appname, String company) throws Exception{
+		boolean flag = false;
+		String sql = "update cve set cve_name=?, author=?, description=?, app_name=?, company=? where cve_name=?";
+		this.ps = this.conn.prepareCall(sql);
+		this.ps.setString(1, new_cvename);
+		this.ps.setString(2, author);
+		this.ps.setString(3, description);
+		this.ps.setString(4, appname);
+		this.ps.setString(5, company);
+		this.ps.setString(6, old_cvename);
+		
+		if( this.ps.executeUpdate() > 0 ){
+			flag = true;
+		}
+		this.ps.close();
+		return flag;
+	}
 
 	@Override
 	public Cve queryByName(String cvename) throws Exception {

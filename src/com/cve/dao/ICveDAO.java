@@ -12,6 +12,8 @@ public interface ICveDAO {
 	
 	public boolean updateCve(String new_cvename, String old_cvename, String description) throws Exception;
 	
+	public boolean updateCve(String old_cvename, String new_cvename, String author, String description, String appname, String company) throws Exception;
+	
 	public Cve queryByName(String cvename) throws Exception;
 	
 	public List<Cve> queryByauthor(String author) throws Exception;

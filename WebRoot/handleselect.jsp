@@ -228,6 +228,18 @@ margin-left:580px;
   <h3>appname: <%=cves.get(i).getApp_name() %></h3>
   <h3>company: <%=cves.get(i).getCompany() %></h3>
   <h3>platform: <%=cves.get(i).getPlatform() %></h3><br>
+  <form action="handledelete.jsp">
+  <fieldset> 
+      <input type="hidden" name="cvename" value="<%=cves.get(i).getCve_name() %>">
+      <center><input type="submit" value="Delete" > </center>
+   </fieldset>
+   </form>
+   <form action="update.jsp">
+  <fieldset> 
+      <input type="hidden" name="cvename" value="<%=cves.get(i).getCve_name() %>">
+      <center><input type="submit" value="Update" > </center>
+   </fieldset>
+   </form>
 </div>
 <% 
 	    }
@@ -244,6 +256,19 @@ margin-left:580px;
   <h3>appname: <%=cve.getApp_name() %></h3>
   <h3>company: <%=cve.getCompany() %></h3>
   <h3>platform: <%=cve.getPlatform() %></h3><br>
+  
+  <form action="handledelete.jsp">
+  <fieldset> 
+      <input type="hidden" name="cvename" value="<%=cve.getCve_name() %>">
+      <center><input type="submit" value="Delete" > </center>
+   </fieldset>
+   </form>
+   <form action="update.jsp">
+  <fieldset> 
+      <input type="hidden" name="cvename" value="<%=cve.getCve_name() %>">
+      <center><input type="submit" value="Update" > </center>
+   </fieldset>
+   </form>
 </div>
 
 <%
@@ -255,10 +280,5 @@ margin-left:580px;
  	Used about <%=time %> s.
  </div>
 
-  <form action="index.jsp">
-  <fieldset> 
-          <br><br><center><input type="submit" value="Return" > </center>
-   </fieldset>
-   </form>
   </body>
 </html>
