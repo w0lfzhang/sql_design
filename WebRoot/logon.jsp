@@ -43,13 +43,13 @@ body {
     box-shadow: 0 0 0 0px #FFF;
 } 
 
- h1 { 
+.loginForm h1 { 
     text-shadow: 0 1px 0 rgba(255, 255, 255,.7), 0px 2px 0 rgba(0, 0, 0, .5); 
     text-transform:uppercase; 
     text-align:center; 
     color:#666; 
     line-height:3em; 
-    margin:80px 0 20px 18px; 
+    margin:0px 0 20px 18px; 
     letter-spacing: 4px; 
     font:normal 30px/1 Microsoft YaHei, sans-serif; 
 } 
@@ -71,7 +71,7 @@ fieldset input[type=text], fieldset input[type=password] {
 
 
 
-button { 
+fieldset input[type=submit] { 
     text-align:center; 
     padding:2px 20px; 
     line-height:2em; 
@@ -135,19 +135,42 @@ fieldset span {
 </head> 
  
 <body class = "userlogin_body"> 
-<h1 align="center">A Simple CVE Search System </h1><br>
+<div class="wrap"> 
+  <form action="handleinsert.jsp" method="post"> 
+    <section class="loginForm"> 
+    
+      <header> 
    
-  		<p align="center"><font size="5"><a href="InsertData.jsp"><button type="button">Insert Data</button></a></font></p><br>
-  		<p align="center"><font size="5"><a href="DeleteData.jsp"><button type="button">Delete Data</button></a></font></p><br>
-  		<p align="center"><font size="5"><a href="SelectData.jsp"><button type="button">Update Data</button></a></font></p><br>
-  		<p align="center"><font size="5"><a href="SelectData.jsp"><button type="button">Search Data</button></a></font></p><br>
+      <h1>Log On</h1> 
+     
+      </header> 
+     
+      <div class="loginForm_content"> 
+        <fieldset> 
+          <div class="inputWrap"> 
+            <input type="text" name="username" placeholder="username" autofocus required> 
+          </div> 
+          <div class="inputWrap"> 
+            <input type="password" name="password" placeholder="password" required> 
+          </div>
+        </fieldset>
+        
+         
+        <fieldset> 
+          <center><input type="submit" value="LogOn" > </center>
+        </fieldset> 
+      </div> 
+    </section> 
+  </form> 
+</div> 
 <div class = "logo">
 </div>
 <script type="text/javascript">
-
+function saysuccess(){
+	alert("insert data success!")
+}
 </script>
 </body> 
 </html> 
 </BODY>
 </HTML>
-
